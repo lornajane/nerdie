@@ -101,7 +101,7 @@ var activityHandler = function (msg) {
 		},
 		function (err, results) {
 			if (err) {
-				if ('No Records' !== err.message) {
+				if ('No records.' !== err.message) {
 					throw err;
 				}
 				return;
