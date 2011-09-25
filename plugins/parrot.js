@@ -31,9 +31,9 @@ Parrot.prototype.init = function () {
 		function(msg) {
 			var num = 0
 			, responses = [
-				"It's the morning. How *good* can that really be?",
-				"My kingdom for a venti non-fat, no foam, no water 6 pump extra hot chai tea latte. Is that so much to ask for?",
-				"STOP YELLING, PEOPLE ARE SLEEPING."
+				"Top of the morning to you",
+                "Good morning!",
+                "It's a beautiful morning"
 				];
 
 			num = Math.floor(Math.random()*responses.length);
