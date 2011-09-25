@@ -10,6 +10,7 @@ Tychay.prototype.init = function () {
 };
 
 Tychay.prototype.getChayism = function(msg) {
+    return;
 	var uri = 'http://phpdoc.info/chayism/';
 
 	request({uri: uri}, function (error, response, body) {
