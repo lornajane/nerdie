@@ -1,3 +1,4 @@
+var util = require('util');
 var NerdieInterface = require('nerdie_interface.js');
 
 var db;
@@ -39,7 +40,7 @@ Tell.prototype.gotDb = function (incomingDb) {
 }
 var isChannel = function (source) {
 	// check source (# or & means it's a channel)
-	var first = source.substr(0, 1);
+	var first = source.toString().substr(0, 1);
 	if ('#' === first || '&' === first) {
 		return true;
 	}
