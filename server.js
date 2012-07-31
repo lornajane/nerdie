@@ -31,7 +31,7 @@ Nerdie.prototype.bot = jerk(function(j){
 	  , loadedPlugins = {}
 	  , name = null;
 
-	require.paths.push(__dirname);
+	//require.paths.push(__dirname);
 	var loadPlugin = function (prefix, filename) {
 		name = prefix + filename.split('.').slice(0, -1).join('.');
 		var pluginLoader = require(name);
