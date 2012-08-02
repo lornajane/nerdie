@@ -49,13 +49,6 @@ Parrot.prototype.init = function () {
 	);
 	
 	this.pluginInterface.registerPattern(
-		/ls/,
-		function(msg) {
-			msg.say(msg.user + ": Haha, wrong screen! :P");
-		}
-	);
-	
-	this.pluginInterface.registerPattern(
 		/tired+/i,
 		function(msg) {
 			var num = 0
