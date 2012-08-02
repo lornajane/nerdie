@@ -47,6 +47,37 @@ Parrot.prototype.init = function () {
 			msg.say(msg.user + ": You might want to switch to Emacs, buddy.");
 		}
 	);
+	
+	this.pluginInterface.registerPattern(
+		/tired+/i,
+		function(msg) {
+			var num = 0
+			, responses = [
+				"Me too! I didn't sleep so good last night.",
+				"I'm too busy to be tired.",
+				"N'awww, hope you sleep well tonight then. :)",
+				"Why not take a quick nap now? I'll keep an eye on things for you."
+				];
+
+			num = Math.floor(Math.random()*responses.length);
+			return msg.say(msg.user + ": " + responses[num]);
+		}
+	);
+	
+	this.pluginInterface.registerPattern(
+		/exercise+/i,
+		function(msg) {
+			var num = 0
+			, responses = [
+				"Maybe we can be workout buddies?",
+				"Feel the burn!!!",
+				"My muscles still ache from my last workout!"
+				];
+
+			num = Math.floor(Math.random()*responses.length);
+			return msg.say(msg.user + ": " + responses[num]);
+		}
+	);
 
 	this.pluginInterface.registerPattern(
 		this.pluginInterface.anchoredPattern('count'),
