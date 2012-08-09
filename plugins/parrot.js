@@ -49,7 +49,7 @@ Parrot.prototype.init = function () {
 	);
 	
 	this.pluginInterface.registerPattern(
-		/ls/,
+		/^ls$/,
 		function(msg) {
 			msg.say(msg.user + ": Haha, wrong screen! :P");
 		}
