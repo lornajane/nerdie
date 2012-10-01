@@ -2,13 +2,12 @@ var util = require('util');
 var NerdieInterface = require('nerdie_interface.js');
 
 var db;
-var publicReminders = 3;
 var myInterface;
-var config = null;
+var allChannels = false;
+var nerdie;
 
 function Tell(parentNerdie) {
-	config = (parentNerdie.config.plugins.tell) ? parentNerdie.config.plugins.tell : {};
-
+	nerdie = parentNerdie;
 	this.pluginInterface = new NerdieInterface(
 		parentNerdie,
 		this,
@@ -29,10 +28,8 @@ Tell.prototype.init = function () {
 		this.pluginInterface.anchoredPattern('ask', true),
 		tellHandler
 	);
-	if (config && config.prompt && config.prompt.length > 0) {
-		this.pluginInterface.userJoin( function(msg) {
-			activityHandler(msg, true);
-		});
+	if (myInterface.nerdie.config.plugins.tell && myInterface.nerdie.config.plugins.tell.allChannels) {
+		allChannels = myInterface.nerdie.config.plugins.tell.allChannels;
 	}
 };
 Tell.prototype.gotDb = function (incomingDb) {
@@ -47,7 +44,7 @@ var isChannel = function (source) {
 	return false;
 };
 var tellHandler = function (msg) {
-	if (!isChannel(msg.source)) {
+	if (!isChannel(msg.source.toString())) {
 		msg.say('You must user reminders within the channel where they will be relayed.');
 		return;
 	}
@@ -62,7 +59,7 @@ var tellHandler = function (msg) {
 		myInterface.uniqueId(),
 		{
 			recipient: tellNick,
-			source: msg.source,
+			source: msg.source.toString(),
 			msg: {
 				time: Date.now(),
 				sender: msg.user,
@@ -98,33 +95,31 @@ var ago = function (ts) {
 
 	return 'seconds';
 };
-var activityHandler = function (msg, prompt) {
-	if (!isChannel(msg.source)) {
+var activityHandler = function (msg) {
+	if (!isChannel(msg.source.toString())) {
 		return; // early; nothing to see here
 	}
-	db.fetch({},
-		function (doc, key) {
-			if (doc.source == msg.source && doc.recipient == msg.user) {
-				return true;
-			}
-		},
-		function (err, results) {
-			if (err) {
-				if (!err.message.match(/No Records/i)) {
-					throw err;
+	try {
+		db.fetch({},
+			function (doc, key) {
+				if ((allChannels || doc.source == msg.source.toString()) && doc.recipient == msg.user) {
+					return true;
 				}
-				return;
-			}
-			if (prompt) {
-				msg.say(msg.user + ': ' + config.prompt);
-			} else {
+			},
+			function (err, results) {
+				if (err) {
+					if ('No Records' !== err.message) {
+						throw err;
+					}
+					return;
+				}
 				results.forEach(function (data) {
-					msg.say(msg.user + ": (from: " + data.msg.sender + ", " + ago(data.msg.time) + " ago) " + data.msg.content);
+					nerdie.bot.say(data.source.toString(), msg.user + ": (from: " + data.msg.sender + ", " + ago(data.msg.time) + " ago) " + data.msg.content);
 					db.remove(data._key, function () {})
 				});
 			}
-		}
-	);
+		);
+	} catch (e) { /* ignore DB errors */ }
 }
 
 module.exports = Tell;

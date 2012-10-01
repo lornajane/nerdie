@@ -1,4 +1,5 @@
 var http = require('http')
+  , detaco = require('detaco')
   , querystring = require('querystring');
 
 var NerdieInterface = require('nerdie_interface.js');
@@ -39,10 +40,12 @@ Twitter.prototype.init = function () {
 	// URLs
 	// 1) https://twitter.com/username/status/123123123123123
 	// 2) https://twitter.com/#!/username/status/123123123123123
+	// 3) https://twitter.com/username/statuses/123123123123123
+	// 4) https://twitter.com/#!/username/statuses/123123123123123
 	this.pluginInterface.registerPattern(
-		/https?:\/\/twitter.com\/(#!\/)?(.+?)\/status\/([0-9]+)/i,
+		/https?:\/\/twitter.com\/(#!\/)?(.+?)\/status(es)?\/([0-9]+)/i,
 		function (msg) {
-			var num = msg.match_data[3];
+			var num = msg.match_data[4];
 			plugin.getStatus(num, msg.say);
 		}
 	);
@@ -56,9 +59,9 @@ Twitter.prototype.init = function () {
 Twitter.prototype.getStatus = function (num, callback) {
 	var plugin = this;
 	var options = {
-		'host': 'twitter.com',
+		'host': 'api.twitter.com',
 		port: 80,
-		path: '/statuses/show/' + encodeURIComponent(num) + '.json'
+		path: '/1/statuses/show/' + encodeURIComponent(num) + '.json'
 	};
 	var data = "";
 	http.get(options, function(res) {
@@ -72,7 +75,7 @@ Twitter.prototype.getStatus = function (num, callback) {
 				callback("Invalid tweet?");
 			}
 			if (data && undefined !== data.user) {
-				callback(plugin.formatTweet(data));
+				detaco.resolve_string(plugin.formatTweet(data), callback);
 			}
 		});
 	});
@@ -98,7 +101,7 @@ Twitter.prototype.getUserStatus = function (username, index, callback) {
 				callback("Invalid tweet?");
 			}
 			if (data && undefined !== data[index] && undefined != data[index].user) {
-				callback(plugin.formatTweet(data[index]));
+				detaco.resolve_string(plugin.formatTweet(data[index]), callback);
 			}
 		});
 	});

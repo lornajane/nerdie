@@ -13,10 +13,10 @@ Convert.prototype.init = function () {
 };
 
 Convert.prototype.getConversion = function(msg) {
-	var toConvert = msg.match_data[2].split('to');
+	var toConvert = msg.match_data[2].split(/\s+to\s+/);
 
 	if (toConvert.length !== 2) {
-		toConvert = msg.match_data[2].split('in');
+		toConvert = msg.match_data[2].split(/\s+in\s+/);
 
 		if (toConvert.length !== 2) {
 			msg.say('Invalid conversion request. Example usage: 1 USD to GBP');
