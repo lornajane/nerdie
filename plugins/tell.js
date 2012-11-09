@@ -45,7 +45,7 @@ var isChannel = function (source) {
 };
 var tellHandler = function (msg) {
 	if (!isChannel(msg.source.toString())) {
-		msg.say('You must use reminders within the channel where they will be relayed.');
+		msg.say('You must user reminders within the channel where they will be relayed.');
 		return;
 	}
 	var txt = msg.match_data[2];
@@ -54,10 +54,6 @@ var tellHandler = function (msg) {
 	if (!tellNick || !tellMsg) {
 		// no nick or message supplied
 		return
-	}
-	if (tellNick.toLowerCase() === nerdie.config.nick.toLowerCase()) {
-		msg.say('Sorry, ' + msg.user + ', but I don't talk to myself.');
-		return;
 	}
 	db.set(
 		myInterface.uniqueId(),
