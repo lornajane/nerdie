@@ -55,6 +55,10 @@ var tellHandler = function (msg) {
 		// no nick or message supplied
 		return
 	}
+	if (tellNick.toLowerCase() === nerdie.config.nick.toLowerCase()) {
+		msg.say('Sorry, ' + msg.user + ', but I don\'t talk to myself.');
+		return;
+	}
 	db.set(
 		myInterface.uniqueId(),
 		{
