@@ -1,0 +1,34 @@
+{
+    "server": "irc.freenode.net",
+    "port": 6667,
+    "ssl": false,
+    "nick": "nerdie",
+    "channels": ["#nerdie"],
+    "admins": ["jperras"],
+    "user": {
+        "username": "nerdie",
+        "realname": "Nerderati Prime"
+    },
+    "prefix": "!",
+    "logs": "logs",
+    "delayAfterConnect": 1500,
+    "plugins": {
+        "tell": {
+          "prompt": ""
+        },
+        "twitter": {
+            "auth": {
+                "user": "nerdiebot",
+                "pass": "PASSWORDGOESHERE"
+            },
+            "track": {
+                "#nerdie": ["nerdie", "@nerdiebot"]
+            }
+        },
+        "pivotal": {
+            "auth": {
+                "token": "XXXXXXXXXXXXX"
+            }
+        }
+    }
+}
